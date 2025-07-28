@@ -1,17 +1,15 @@
 import Image from "next/image";
-import React from "react";
 import Link from "next/link";
-import { collectionNamesObj, dbConnect } from "@/lib/bdConnect";
-import { ObjectId } from "mongodb";
+// import { collectionNamesObj, dbConnect } from "@/lib/bdConnect";
+// import { ObjectId } from "mongodb";
 
 export default async function ServiceDetailsPage({ params }) {
-  const p = await params;
-
-
- const collection = await dbConnect(collectionNamesObj.text_services);
-const data= await collection.findOne({ _id: new ObjectId(p.id) });
+ const p =await params ;
 
  
+  const res=await  fetch(`http://localhost:3000/api/service/${p.id}`)
+  const data =await  res.json()
+   
   return (
     <div className="container mx-auto">
       <section className="flex justify-center ">
@@ -24,8 +22,9 @@ const data= await collection.findOne({ _id: new ObjectId(p.id) });
           />
           <div className="transparent-layer absolute w-full h-full border-2 border-red-400 top-0">
             <div className="w-full h-full font-bold text-2xl flex items-center ps-16">
+           
               <div>
-                <h1 className="text-white">{data.title}</h1>
+                <h1 className="text-white">{data.title}  </h1>
               </div>
             </div>
           </div>

@@ -2,10 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import registerUser from "@/app/actions/auth/registerUser";
-
-
- 
-// import SocialLogin from "@/app/login/components/SocialLogin";
+ import SocialLogin from "@/app/login/components/SocialLogin";
 export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +68,7 @@ export default function RegisterForm() {
         </div>
 
         <p className="text-center text-sm">Or Sign In with</p>
-        {/* <SocialLogin /> */}
+        <SocialLogin />
      <p className="text-center">
         Already have an account?{" "}
         <Link href="/login" className="text-orange-500 font-bold">

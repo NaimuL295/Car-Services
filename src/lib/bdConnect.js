@@ -3,12 +3,12 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 export const collectionNamesObj = {
   text_services: "text_services",
    user: "user",
+   order: "order",
   // bookingCollection: "test_booking"
 };
 
 const uri = process.env.NEXT_PUBLIC_MONGODB_URI; // ✅ Fixed
 const dbName = process.env.DB_NAME;
-
 
 const client = new MongoClient(uri, {
   serverApi: {

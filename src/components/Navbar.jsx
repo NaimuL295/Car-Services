@@ -2,6 +2,7 @@
 
  import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+
 import Link from "next/link";
 import React from "react";
 
@@ -22,10 +23,10 @@ console.log(session?.user);
         </li>
         <li>
           <Link href={"/services"}>Services</Link>
-        </li>{" "}
+        </li>
         <li>
           <Link href={"/blogs"}>Blogs</Link>
-        </li>{" "}
+        </li>
         <li>
           <Link href={"/my-bookings"}>My Bookings</Link>
         </li>
@@ -62,12 +63,12 @@ console.log(session?.user);
             </ul>
           </div>
           <Link href={"/"} className="text-xl">
-            <Image
-              src={"/assets/logo.svg"}
+            {/* <Image
+              sr={'/assets/logo.svg'}
               width={107}
               height={87}
               alt="brand logo"
-            />
+            /> */}
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
@@ -79,7 +80,7 @@ console.log(session?.user);
               <>
                 <li>
                   <Image
-                    src={session?.user?.image}
+                    src={session?.user?.image  || null}
                     width={50}
                     height={50}
                     alt="user-logo"
