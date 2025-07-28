@@ -12,7 +12,7 @@ export default async function UpdateBookingPage({ params }) {
     }
   );
   const data = await res.json();
-  console.log(data ,"up");
+
   
   return (
     <div>

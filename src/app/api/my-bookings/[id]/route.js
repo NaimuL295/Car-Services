@@ -1,34 +1,56 @@
 import { collectionNamesObj, dbConnect } from "@/lib/bdConnect";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server"
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export const GET= async(req,{params})=>{
  const p=await params ;
 
  const bookingCollection = await dbConnect(collectionNamesObj.order)
   const query= {_id: new ObjectId(p.id)}
- const singleBooking=await bookingCollection.findOne(query)
-    return NextResponse.json(singleBooking);
 
+
+   
+   const session = await getServerSession(authOptions)
+
+  const email = session?.user?.email
+    const singleBooking = await bookingCollection.findOne(query)
+    const isOwnerOK = email === singleBooking?.email
+    if (isOwnerOK) {
+         return NextResponse.json(singleBooking);
+    }
 }
 
 export const PATCH = async (req, { params }) => {
-  try {
-    const body = await req.json();
-    const p = params; 
-    const bookingCollection = await dbConnect(collectionNamesObj.order);
+    const p = await params;
+    const bookingCollection = dbConnect(collectionNamesObj.bookingCollection)
+    const query = { _id: new ObjectId(p.id) }
 
-    const query = { _id: new ObjectId(p.id) };
-    const update = {
-      $set: { ...body },
-    };
-    const options = { upsert: true };
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const currentBookingData = await bookingCollection.findOne(query)
+    const isOwnerOK = email === currentBookingData?.email
 
-    const updateResult = await bookingCollection.updateOne(query, update, options); 
+    if (isOwnerOK) {
+        const body = await req.json()
 
-    return NextResponse.json(updateResult);
-  } catch (error) {
-    console.error("PATCH error:", error);
-    return NextResponse.json({ error: "Failed to update booking." }, { status: 500 });
-  }
-};
+        const filter = {
+            $set: { ...body }
+        }
+
+        const option = {
+            upsert: true
+        }
+        const updateReponse = await bookingCollection.updateOne(query, filter, option)
+        revalidatePath("/my-bookings")
+        return NextResponse.json(updateReponse)
+    }
+    else {
+        return NextResponse.json({ message: "Forbidden Update action" }, {
+            status: 403
+        })
+    }
+
+}

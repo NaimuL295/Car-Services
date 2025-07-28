@@ -10,7 +10,6 @@ export default function NavBar() {
 
 const {data:session,status}=useSession()
 
-console.log(session?.user);
 
   const navMenu = () => {
     return (

@@ -6,10 +6,12 @@ import React from "react";
 import toast from "react-hot-toast";
 
 const BookingUpdateForm = ({ data }) => {
+
+  
   const { data: session } = useSession();
   const router = useRouter();
-  console.log(session);
-  console.log("FROM UPDATE FORM", data);
+
+
 
   const handleBookService = async (e) => {
     toast("Submitting Booking...");
@@ -38,14 +40,17 @@ const BookingUpdateForm = ({ data }) => {
       // service_price: data.price,
     };
 
-    console.log(bookingPayload);
+    
     const res = await fetch(
-      `http://localhost:3000/api/my-bookings/${data.id}`,
+      `http://localhost:3000/api/my-bookings/${data._id}`,
       {
         method: "PATCH",
         body: JSON.stringify(bookingPayload),
       }
     );
+
+ 
+    
     const postedResponse = await res.json();
     console.log("Updated DATA response", postedResponse);
     router.push("/my-bookings");
